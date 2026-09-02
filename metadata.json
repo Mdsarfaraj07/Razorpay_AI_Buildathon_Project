@@ -1,0 +1,6 @@
+{
+  "name": "RazorPay AI Sentinel - Payment Fraud & Risk Manager",
+  "description": "Real-time AI/ML transaction fraud detection, chargeback auto-responder, abuse ring sentinel, immutable audit trail, and regulatory compliance reporting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
