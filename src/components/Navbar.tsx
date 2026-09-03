@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   ShieldAlert, 
   Activity, 
@@ -9,12 +9,8 @@ import {
   Zap, 
   Download,
   Cpu,
-  FileDown,
-  Sparkles,
-  Rocket
+  Sparkles
 } from 'lucide-react';
-import { generateBuildathonProjectReportPDF } from '../services/buildathonProjectReportPdf';
-import { OneClickDeployModal } from './OneClickDeployModal';
 
 export type AppTabType = 'metrics' | 'live-feed' | 'ml-workbench' | 'chargeback' | 'abuse-ring' | 'audit-compliance';
 
@@ -38,24 +34,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   liveCount,
   onExportAudit
 }) => {
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
-
-  const handleDownloadBuildathonReport = () => {
-    setIsGeneratingPdf(true);
-    try {
-      generateBuildathonProjectReportPDF({
-        projectTitle: 'RAZORPAY FRAUD SENTINEL AI',
-        submissionDate: '2026-09-02',
-        liveDevUrl: window.location.origin
-      });
-    } catch (err) {
-      console.error('Failed to generate Buildathon PDF report:', err);
-    } finally {
-      setTimeout(() => setIsGeneratingPdf(false), 600);
-    }
-  };
-
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -105,27 +83,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             <div className="h-6 w-px bg-slate-200"></div>
-
-            {/* 1-Click Render Cloud Deploy Button */}
-            <button
-              onClick={() => setIsDeployModalOpen(true)}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 text-xs font-bold rounded shadow-sm transition flex items-center space-x-1.5 font-mono"
-              title="Open 1-Click Render Cloud Deployment guide & Blueprint config"
-            >
-              <Rocket className="w-3.5 h-3.5 text-emerald-200" />
-              <span>1-CLICK DEPLOY</span>
-            </button>
-
-            {/* Buildathon Submission Report PDF Button */}
-            <button
-              onClick={handleDownloadBuildathonReport}
-              disabled={isGeneratingPdf}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-1.5 text-xs font-bold rounded shadow-sm transition flex items-center space-x-1.5 font-mono"
-              title="Download official 3-page submission report dossier in print-ready PDF format"
-            >
-              <FileDown className="w-3.5 h-3.5 text-indigo-200" />
-              <span>{isGeneratingPdf ? 'GENERATING PDF...' : 'SUBMISSION REPORT (PDF)'}</span>
-            </button>
 
             <button
               onClick={() => {
@@ -235,12 +192,6 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
       </div>
-
-      {/* 1-Click Render / Cloud Deployment Modal */}
-      <OneClickDeployModal
-        isOpen={isDeployModalOpen}
-        onClose={() => setIsDeployModalOpen(false)}
-      />
     </header>
   );
 };
