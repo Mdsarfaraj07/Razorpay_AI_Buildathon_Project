@@ -7,7 +7,7 @@ import { createServer as createViteServer } from 'vite';
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 app.use(express.json());
 
@@ -27,7 +27,17 @@ function getAI(): GoogleGenAI {
   return aiClient;
 }
 
-// Health check endpoint
+// Health check endpoints for Render, Railway, and Cloud probes
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    engine: 'RazorPay-AI-Sentinel-v3.4',
+    environment: process.env.NODE_ENV || 'production',
+    uptime: process.uptime(),
+    timestamp: Date.now()
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', engine: 'RazorPay-AI-Sentinel-v3.4', timestamp: Date.now() });
 });

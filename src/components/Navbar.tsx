@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   ShieldAlert, 
   Activity, 
@@ -8,8 +8,13 @@ import {
   Lock, 
   Zap, 
   Download,
-  Cpu
+  Cpu,
+  FileDown,
+  Sparkles,
+  Rocket
 } from 'lucide-react';
+import { generateBuildathonProjectReportPDF } from '../services/buildathonProjectReportPdf';
+import { OneClickDeployModal } from './OneClickDeployModal';
 
 export type AppTabType = 'metrics' | 'live-feed' | 'ml-workbench' | 'chargeback' | 'abuse-ring' | 'audit-compliance';
 
@@ -33,6 +38,24 @@ export const Navbar: React.FC<NavbarProps> = ({
   liveCount,
   onExportAudit
 }) => {
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
+
+  const handleDownloadBuildathonReport = () => {
+    setIsGeneratingPdf(true);
+    try {
+      generateBuildathonProjectReportPDF({
+        projectTitle: 'RAZORPAY FRAUD SENTINEL AI',
+        submissionDate: '2026-09-02',
+        liveDevUrl: window.location.origin
+      });
+    } catch (err) {
+      console.error('Failed to generate Buildathon PDF report:', err);
+    } finally {
+      setTimeout(() => setIsGeneratingPdf(false), 600);
+    }
+  };
+
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,8 +78,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* Model Real-time Stats & Engine Status */}
-          <div className="hidden md:flex items-center space-x-6">
+          {/* Model Real-time Stats & Action Buttons */}
+          <div className="hidden md:flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
               <span className="text-xs font-semibold text-slate-600 uppercase tracking-wider">
@@ -66,7 +89,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <div className="h-6 w-px bg-slate-200"></div>
 
-            <div className="flex items-center space-x-4 text-xs font-mono text-slate-600">
+            <div className="flex items-center space-x-3 text-xs font-mono text-slate-600">
               <div>
                 <span className="text-slate-400">PRECISION: </span>
                 <span className="font-bold text-slate-900">{precision}%</span>
@@ -83,6 +106,27 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <div className="h-6 w-px bg-slate-200"></div>
 
+            {/* 1-Click Render Cloud Deploy Button */}
+            <button
+              onClick={() => setIsDeployModalOpen(true)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 text-xs font-bold rounded shadow-sm transition flex items-center space-x-1.5 font-mono"
+              title="Open 1-Click Render Cloud Deployment guide & Blueprint config"
+            >
+              <Rocket className="w-3.5 h-3.5 text-emerald-200" />
+              <span>1-CLICK DEPLOY</span>
+            </button>
+
+            {/* Buildathon Submission Report PDF Button */}
+            <button
+              onClick={handleDownloadBuildathonReport}
+              disabled={isGeneratingPdf}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-1.5 text-xs font-bold rounded shadow-sm transition flex items-center space-x-1.5 font-mono"
+              title="Download official 3-page submission report dossier in print-ready PDF format"
+            >
+              <FileDown className="w-3.5 h-3.5 text-indigo-200" />
+              <span>{isGeneratingPdf ? 'GENERATING PDF...' : 'SUBMISSION REPORT (PDF)'}</span>
+            </button>
+
             <button
               onClick={() => {
                 setActiveTab('audit-compliance');
@@ -90,7 +134,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-1.5 text-xs font-bold rounded shadow-sm transition flex items-center space-x-1.5 font-mono"
             >
               <Lock className="w-3 h-3 text-indigo-300" />
-              <span>EXPORT AUDIT TRAIL</span>
+              <span>AUDIT TRAIL</span>
             </button>
           </div>
 
@@ -191,6 +235,12 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
       </div>
+
+      {/* 1-Click Render / Cloud Deployment Modal */}
+      <OneClickDeployModal
+        isOpen={isDeployModalOpen}
+        onClose={() => setIsDeployModalOpen(false)}
+      />
     </header>
   );
 };
