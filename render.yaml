@@ -10,6 +10,6 @@ services:
     autoDeploy: true
     envVars:
       - key: NODE_ENV
-        value: production
+        value: productionAQ.Ab8RN6KNhzQ-0hNaodTyvKLgyOH4B0UBlOoJBw1GSwflwhCB4Q
       - key: GEMINI_API_KEY
         sync: false
