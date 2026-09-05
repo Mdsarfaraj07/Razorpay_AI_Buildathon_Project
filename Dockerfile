@@ -34,7 +34,7 @@ RUN npm install --only=production
 # Copy compiled frontend and bundled server from builder stage
 COPY --from=builder /app/dist ./dist
 
-# Expose HTTP port (Render & Railway inject dynamic PORT at runtime)
+
 EXPOSE 3000
 
 # Health check
