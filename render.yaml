@@ -11,5 +11,5 @@ services:
     envVars:
       - key: NODE_ENV
         value: productionAQ.Ab8RN6KNhzQ-0hNaodTyvKLgyOH4B0UBlOoJBw1GSwflwhCB4Q
-      - key: GEMINI_API_KEY
+      - key: API_KEY
         sync: false
